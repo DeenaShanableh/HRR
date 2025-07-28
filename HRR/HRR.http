@@ -1,0 +1,6 @@
+@HRR_HostAddress = http://localhost:5264
+
+GET {{HRR_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
