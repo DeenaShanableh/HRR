@@ -57,7 +57,7 @@ namespace HRR.Controllers
                                 Phone = employee.Phone,
                                 ManagerId = employee.ManagerId,              
                                 ManagerName = Manager.Name,
-                                DepartmentId = employee.DepartmentId
+                                DepartmentId = employee.DepartmentId,
                             };
             return Ok(data);
            // try
