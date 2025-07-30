@@ -4,6 +4,7 @@ using HRR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRR.Migrations
 {
     [DbContext(typeof(HrDbContext))]
-    partial class HrDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250730102549_new_table_users")]
+    partial class new_table_users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,9 +199,6 @@ namespace HRR.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("userId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
@@ -206,8 +206,6 @@ namespace HRR.Migrations
                     b.HasIndex("ManagerId");
 
                     b.HasIndex("PostionId");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("Employees");
                 });
@@ -235,17 +233,11 @@ namespace HRR.Migrations
                         .WithMany()
                         .HasForeignKey("PostionId");
 
-                    b.HasOne("HRR.Model.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-
                     b.Navigation("DepartmentRow");
 
                     b.Navigation("Lookup");
 
                     b.Navigation("Manager");
-
-                    b.Navigation("user");
                 });
 #pragma warning restore 612, 618
         }

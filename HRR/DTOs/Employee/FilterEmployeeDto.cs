@@ -2,7 +2,7 @@
 {
     public class FilterEmployeeDto
     {
-        public long? PositionId{ get; set; }
+        public long? PostionId{ get; set; }
         public string? EmployeeName { get; set; }
 
         public bool IsActive { get; set; }

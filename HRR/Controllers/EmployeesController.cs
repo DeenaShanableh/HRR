@@ -38,9 +38,9 @@ namespace HRR.Controllers
             var data = from employee in _dbContext.Employees
                        from department in _dbContext.Departments.Where(x => x.Id == employee.DepartmentId).DefaultIfEmpty()//Left Join
                        from Manager in _dbContext.Employees.Where(x => x.Id == employee.ManagerId).DefaultIfEmpty()//Left Join
-                       from lookup in _dbContext.Lookups.Where(x => x.Id == employee.PositionId).DefaultIfEmpty()//Left join
+                       from lookup in _dbContext.Lookups.Where(x => x.Id == employee.PostionId).DefaultIfEmpty()//Left join
                        where 
-                             (filterDto.PositionId == null|| employee.PositionId == filterDto.PositionId )&&//employee.position == postion //filter
+                             (filterDto.PostionId == null|| employee.PostionId == filterDto.PostionId )&&//employee.position == postion //filter
                              (filterDto.EmployeeName == null || employee.Name.ToUpper().Contains(filterDto.EmployeeName.ToUpper()))&&
                              (filterDto.IsActive == null || employee.IsActive == filterDto.IsActive)
 
@@ -50,8 +50,8 @@ namespace HRR.Controllers
                                 Id = employee.Id,
                                 Name = employee.Name,
                                 BirthDate = employee.BirthDate,
-                                PositionId = employee.PositionId,
-                                PositionName = lookup.Name,
+                                PostionId = employee.PostionId,
+                                PostionName = lookup.Name,
                                 IsActive = employee.IsActive,
                                 StartDate = employee.StartDate,
                                 Phone = employee.Phone,
@@ -90,8 +90,8 @@ namespace HRR.Controllers
                 Id = employee.Id,
                 Name = employee.Name,
                 BirthDate = employee.BirthDate,
-                PositionId = employee.PositionId,
-                PositionName = employee.Lookup.Name,
+                PostionId = employee.PostionId,
+                PostionName = employee.Lookup.Name,
                 StartDate = employee.StartDate,
                 ManagerId = employee.ManagerId,
                 DepartmentId = employee.DepartmentId,
@@ -118,7 +118,7 @@ namespace HRR.Controllers
                 Id = 0,//Ignored
                 Name = employeeDto.Name,
                 BirthDate = employeeDto.BirthDate,
-                PositionId = employeeDto.PositionId,
+                PostionId = employeeDto.PostionId,
                 IsActive = employeeDto.IsActive,
                 StartDate = employeeDto.StartDate,
                 EndDate = employeeDto.EndDate,
@@ -147,7 +147,7 @@ namespace HRR.Controllers
             }
             employee.Name = employeeDto.Name;
             employee.BirthDate = employeeDto.BirthDate;
-            employee.PositionId = employeeDto.PositionId;
+            employee.PostionId = employeeDto.PostionId;
             employee.IsActive = employeeDto.IsActive;
             employee.StartDate = employeeDto.StartDate;
             employee.EndDate = employeeDto.EndDate;

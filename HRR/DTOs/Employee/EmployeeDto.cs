@@ -12,7 +12,7 @@
         public long? ManagerId { get; set; }
         public string? ManagerName { get; set; }
         public string DepartmentName { get; internal set; }
-        public long? PositionId { get; set; }
-        public string? PositionName { get; set; }
+        public long? PostionId { get; set; }
+        public string? PostionName { get; set; }
     }
 }
