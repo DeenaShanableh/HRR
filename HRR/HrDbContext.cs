@@ -30,6 +30,12 @@ namespace HRR
                 new Lookup { Id = 8, MajorCode = 1, MinorCode = 3, Name = "Technical" }
                 );
 
+
+            //BCrypt.Net.BCrypt.HashPassword("Admin@123") ="$2a$11$HgF7QZZIqdWlCdkWz.ftMe1QQdeamQEtVdIvD.t/TaM/88N6oB80q"
+            modelBuilder.Entity<User>().HasData
+                (new User { Id = 1, UserName = "Admin", HashedPassword = "$2a$11$HgF7QZZIqdWlCdkWz.ftMe1QQdeamQEtVdIvD.t/TaM/88N6oB80q", IsAdmin = true}
+                );
+
         }
         
 

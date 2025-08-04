@@ -2,12 +2,14 @@
 using HRR.Model;
 
 using HRR.NewFolder;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 namespace HRR.Controllers
 {
+    [Authorize] //Authentication / Authorization
     [Route("api/Employees")] //-- Data Anonotation
     [ApiController] //-- Data Anonotation
     public class EmployeesController : ControllerBase
@@ -31,7 +33,7 @@ namespace HRR.Controllers
             //employees.Add(new Employee { Name = "employee4", Age = 20, Postion = "Manger" });
            
         }
-
+        [Authorize(Roles = "HR,Admin")]
         [HttpGet("GetAll")] //--> Data Anonotation
         public IActionResult GetAll([FromQuery]FilterEmployeeDto filterDto)//postion Is Optional //Query Parameter
         {
@@ -111,8 +113,17 @@ namespace HRR.Controllers
             return Ok(employee);
         }
         [HttpPost("Add")]
-        public IActionResult Add([FromBody]SaveEmployeeDto employeeDto,[FromQuery]long example)
+        public IActionResult Add([FromBody]SaveEmployeeDto employeeDto)
         {
+            var user = new User()
+            {
+                Id = 0,
+                UserName = $"{employeeDto.Name}_HR",//Ahmad -->Ahmad_HR
+                HashedPassword = BCrypt.Net.BCrypt.HashPassword($"{employeeDto.Name}@123"),//Ahmad -->Ahmad@123
+                IsAdmin = false 
+            };
+            _dbContext.Users.Add(user);
+
             var employee = new Employee()
             {
                 Id = 0,//Ignored
@@ -123,10 +134,14 @@ namespace HRR.Controllers
                 StartDate = employeeDto.StartDate,
                 EndDate = employeeDto.EndDate,
                 DepartmentId = employeeDto.DepartmentId,
-                ManagerId = employeeDto.ManagerId
+                ManagerId = employeeDto.ManagerId,
+                User = user
+
 
             };
+
             _dbContext.Employees.Add(employee);
+
             _dbContext.SaveChanges();
             return Ok();
         }

@@ -29,8 +29,8 @@ namespace HRR.NewFolder
         public Lookup? Lookup { get; set; }
 
         [ForeignKey("User")]
-        public long? userId { get; set; }
-        public User? user  { get; set; }
+        public long? UserId { get; set; }
+        public User? User  { get; set; }
 
     }
 }
