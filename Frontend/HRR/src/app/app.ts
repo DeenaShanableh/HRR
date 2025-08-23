@@ -1,12 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgIf, NgFor ,NgClass,NgStyle} from '@angular/common';
+import { NgIf, NgFor ,NgClass,NgStyle, CommonModule} from '@angular/common';
 import { RandomColor } from './directives/random-color';
 import { FormsModule ,FormGroup,FormControl,ReactiveFormsModule, Validators } from '@angular/forms';
-
+import {ReversePipe}from './pipes/reverse-pipe'
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgIf, NgFor, NgClass, NgStyle, RandomColor,FormsModule,ReactiveFormsModule],
+  imports: [RouterOutlet, NgIf, NgFor, NgClass, NgStyle,
+     RandomColor,FormsModule,ReactiveFormsModule,
+     CommonModule,ReversePipe],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -64,9 +66,15 @@ export class App {
     {id : 4 , name : "Python"}
   ];
 
-
+  price = 22250.5;
+  creationDate = new Date();
+  name = "Deena";
   reset(){
     this.form.reset();
     course : 1
+  }
+  submit(){
+    alert(`Welcome to the academy ,${this.form.value.name}!
+      We will contact you shortly about the ${this.courses.find(x => x.id == this.form.value.course)?.name} course`)
   }
 }
