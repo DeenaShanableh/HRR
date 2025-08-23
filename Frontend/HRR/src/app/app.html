@@ -1,0 +1,203 @@
+<!-- <div class="title">
+Title : {{title}}
+</div>
+
+<div class="title">
+Number : {{num}}
+</div>
+
+<div class="title">
+Boolean : {{bool}}
+</div>
+
+<div class="title">
+Array : {{arr}}
+</div>-->
+
+ <!-- structural directives : ngif , ngfor , ngswitch -->
+ <!-- Attribute directives : ngClass , ngStyle -->
+
+<!-- <div class="title"> Before Angular 17</div>
+
+<div appRandomColor *ngFor="let student of students ; index as i">
+  <span>  {{i+1}} </span>
+  <span style="margin-right: 5px"  [ngClass] = "{'passed': student.mark > 50 , failed : student.mark <= 50}"> {{student.name}} </span>
+  <span style="margin-right: 5px"  [ngStyle] = "{'color' : student.mark > 50? 'green' : 'red' , 'font-size' : student.mark > 50 ? '10px' : '8px'}"> {{student.mark}}% </span>
+  <span *ngIf="student.mark > 50">Passed</span>
+  <span *ngIf="student.mark <= 50" >Failed</span>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br> -->
+<!-- controle flo sentac -->
+ <!-- <div class="title"> After Angular 17</div>
+@for(student of students; track student ; let i = $index){
+<div>
+    <span>  {{i+1}} </span>
+  [class.passed]="student.mark > 50" [class.failed] = "student.mark <= 50"
+  <span style="margin-right: 5px" [class] = "student.mark > 50? 'passed':'failed' "> {{student.name}} </span>
+
+  [style.color]="student.mark > 50 ? 'green' : 'red'" 
+  <span style="margin-right: 5px"  [style]="{'color' : student.mark > 50 ? 'green' : 'red'}"> {{student.mark}}% </span>
+
+  @if(student.mark >50){
+      <span>Passed</span>
+  }
+  @else{
+  <span>Failed</span>
+  }
+</div>
+} -->
+
+
+<!-- 
+            <div style="margin: 40px;">
+
+                <img width="50%" height="50%" id="image"
+                 [src] ="images[currentIndex]"
+                 alt="random-image">
+                
+                 <br>
+                 <button type="button" id="previous" [disabled]="currentIndex === 0" (click)="previous()">Previous</button>
+                 <button type="button" id="next" [disabled]="currentIndex === images.length - 1" (click)="next()">Next</button>
+            </div>
+ -->
+
+ <!-- Tow way data binding  -->
+ <!-- <div style="margin: 40px">
+  <form [formGroup]="form">
+  <input type="text" formControlName="name"> 
+  </form>
+     
+ </div>
+
+ <div class="title">
+  {{form.value.name}}
+ </div> -->
+
+
+ <div class="header">
+            <h2>Select And Submit To Join One Of
+                Our Courses</h2>
+            <div class="content">
+                <div class="account">
+                    <span class="account-email">q.irshaid@gmail.com</span>
+
+                    <span class="switch-account">
+                        <a href="https://myaccount.google.com/" target="_blank"
+                            >Switch Account</a>
+                    </span>
+
+                    <span class="icon">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </span>
+                </div>
+                <p class="description" id="description">
+                    The name, email address and photo associated with your
+                    Google Account will be recorded when you upload files and
+                    submit this form
+                </p>
+            </div>
+            <p class="warning">
+                * Indicates required question
+            </p>
+        </div>
+        <form [formGroup]="form">
+            <div class="question">
+                <div class="title">
+                    <label for="email">
+                        Email<span class="required-icon">*</span>
+                    </label>
+                </div>
+                <div class="question-input">
+                    <input id="email" type="email"  formControlName = "email" [class.requird-input-warning]="form.get('email')?.invalid && form.get('email')?.touched"
+                        placeholder="Your Email Address">
+                    @if(form.get('email')?.invalid && form.get('email')?.touched ){
+                     @if(form.get('email')?.errors?.['required']){
+                       <div class="invalid-input-message">
+                        * Email is required
+                       </div>
+                     }
+                     @if(form.get('email')?.errors?.['email']){
+                      <div class="invalid-input-message">
+                        * invalid Email
+                      </div>
+                     }
+                    
+                    }
+                    
+                </div>
+            </div>
+            <div class="question">
+                <div class="title">
+                    <label for="name">
+                        Name<span class="required-icon">*</span>
+                    </label>
+                </div>
+                <div class="question-input">
+                    <input id="name" type="text" placeholder="Your Name" formControlName = "name">
+                </div>
+            </div>
+            <div class="question">
+                <div class="title">
+                    <label for="number">
+                        Phone Number<span class="required-icon">*</span>
+                    </label>
+                </div>
+                <div class="question-input">
+                    <input id="number" type="text" formControlName = "phone"
+                        placeholder="Your Phone Number" >
+                </div>
+            </div>
+            <div class="question">
+                <div class="title">
+                    <label for="course">
+                        Course<span class="required-icon">*</span>
+                    </label>
+                </div>
+                <div class="question-input">
+                    <select id="course" formControlName = "course">
+                      @for(course of courses  ; track course ){
+                        <option [value]="course.id"> {{course.name}} </option>
+                      }
+                    </select>
+                </div>
+            </div>
+
+            <div class="action">
+                <button type="submit" class="submit button"[class.disabled-button]="!form.valid"[disabled]="!form.valid">Submit</button>
+                <button type="reset" class="reset button" (click)="reset()">Clear Form</button>
+            </div>
+        </form>
+
+        <div class="footer">
+            <p class="copy-right">This form was created inside Princess Sumaya
+                University for
+                Technology.
+                Does this form look suspicious?
+                <a href>Report</a></p>
+            <p class="logo">
+                Google Forms
+            </p>
+        </div>
+
+        <!-- <div class="container">
+            <div class="box">Box 1</div>
+            <div class="box">Box 2</div>
+            <div class="box">Box 3</div>
+        </div> -->
+
+
+
+            <div style="margin: 40px;">
+
+                <img width="50%" height="50%" id="image"
+                 src=""
+                 alt="random-image">
+                
+                 <br>
+                 <button type="button" id="previous" >Previous</button>
+                 <button type="button" id="next">Next</button>
+            </div>

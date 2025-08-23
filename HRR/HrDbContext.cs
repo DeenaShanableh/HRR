@@ -36,6 +36,9 @@ namespace HRR
                 (new User { Id = 1, UserName = "Admin", HashedPassword = "$2a$11$HgF7QZZIqdWlCdkWz.ftMe1QQdeamQEtVdIvD.t/TaM/88N6oB80q", IsAdmin = true}
                 );
 
+            modelBuilder.Entity<User>().HasIndex(x => x.UserName).IsUnique();
+            modelBuilder.Entity<Employee>().HasIndex(x => x.UserId).IsUnique();
+
         }
         
 

@@ -24,43 +24,53 @@ namespace HRR.Controllers
 
         }
         [HttpPost("Login")]
-        public IActionResult Login(LoginDto loginDto) 
+        public IActionResult Login(LoginDto loginDto)
         {
-            //admin , Admin ,ADMIN == Admin
-            var user = _dbContext.Users.FirstOrDefault(x => x.UserName.ToUpper() == loginDto.UserName.ToUpper());
-
-            if(user == null)
+            try
             {
-                return BadRequest("Invalid UserName");
-            }
-           // True --> Matching Passwords
-           // !True --> False
-           // False --> Not Matching Password
-           // !False --> True
-            if(!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.HashedPassword)) 
-            {
+                //admin , Admin ,ADMIN == Admin
+                var user = _dbContext.Users.FirstOrDefault(x => x.UserName.ToUpper() == loginDto.UserName.ToUpper());
 
-                return BadRequest("Invalidb UserName Pr Password");
+                if (user == null)
+                {
+                    return BadRequest("Invalid UserName");
+                }
+                // True --> Matching Passwords
+                // !True --> False
+                // False --> Not Matching Password
+                // !False --> True
+                if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.HashedPassword))
+                {
+
+                    return BadRequest("Invalidb UserName Pr Password");
+                }
+                var token = GenerateJwtToken(user);
+                return Ok(token);
+
             }
-            var token = GenerateJwtToken(user);
-            return Ok(token);
-        }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            }
 
         private string GenerateJwtToken(User user)
         {
+            
             var claims = new List<Claim>();//user Info
             //Key --> Value
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-            
+
             // HR , Manager , Developer , Admin --> Roles
-            if (user.IsAdmin) 
+            if (user.IsAdmin)
             {
-                claims.Add(new Claim(ClaimTypes.Role,"Admin"));
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
             }
             else
             {
-                var employee = _dbContext.Employees.Include(x => x.Lookup).FirstOrDefault(x => x.UserId== user.Id);
+                var employee = _dbContext.Employees.Include(x => x.Lookup).FirstOrDefault(x => x.UserId == user.Id);
                 claims.Add(new Claim(ClaimTypes.Role, employee.Lookup.Name));
             }
 
@@ -70,12 +80,14 @@ namespace HRR.Controllers
             var tokenSettings = new JwtSecurityToken(
                 claims: claims, // User Info
                 expires: DateTime.Now.AddDays(1), // When Does The Token Expire
-                signingCredentials : creds // Encryption Settings
+                signingCredentials: creds // Encryption Settings
                 );
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.WriteToken(tokenSettings);
 
-           return token;
+            return token;
+        
+          
         }
     }
 }
