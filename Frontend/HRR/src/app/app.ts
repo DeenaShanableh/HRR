@@ -4,11 +4,21 @@ import { NgIf, NgFor ,NgClass,NgStyle, CommonModule} from '@angular/common';
 import { RandomColor } from './directives/random-color';
 import { FormsModule ,FormGroup,FormControl,ReactiveFormsModule, Validators } from '@angular/forms';
 import {ReversePipe}from './pipes/reverse-pipe'
+import { Employees } from './component/employees/employees';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgIf, NgFor, NgClass, NgStyle,
-     RandomColor,FormsModule,ReactiveFormsModule,
-     CommonModule,ReversePipe],
+  imports: [
+    //RouterOutlet,
+    //  NgIf, 
+    // NgFor, 
+    // NgClass,
+    //  NgStyle,
+     //RandomColor
+     FormsModule,
+     ReactiveFormsModule,
+     CommonModule,
+     //ReversePipe,
+     Employees],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -51,30 +61,34 @@ export class App {
   //   }
   // }
 
-  form = new FormGroup({
-   name : new FormControl(null, Validators.required),
-   email : new FormControl(null,[Validators.required,Validators.email]), 
-   phone : new FormControl(null,[Validators.required,Validators.minLength(9),Validators.maxLength(10)]),
-   course : new FormControl(1,Validators.required)
-  });
+  // form = new FormGroup({
+  //  name : new FormControl(null, Validators.required),
+  //  email : new FormControl(null,[Validators.required,Validators.email]), 
+  //  phone : new FormControl(null,[Validators.required,Validators.minLength(9),Validators.maxLength(10)]),
+  //  course : new FormControl(1,Validators.required)
+  // });
 
   
-  courses = [
-    {id : 1 , name : "Asp.Net"},
-    {id : 2 , name : "Angular"},
-    {id : 3 , name : "Java"},
-    {id : 4 , name : "Python"}
-  ];
+  // courses = [
+  //   {id : 1 , name : "Asp.Net"},
+  //   {id : 2 , name : "Angular"},
+  //   {id : 3 , name : "Java"},
+  //   {id : 4 , name : "Python"}
+  // ];
 
-  price = 22250.5;
-  creationDate = new Date();
-  name = "Deena";
-  reset(){
-    this.form.reset();
-    course : 1
-  }
-  submit(){
-    alert(`Welcome to the academy ,${this.form.value.name}!
-      We will contact you shortly about the ${this.courses.find(x => x.id == this.form.value.course)?.name} course`)
-  }
+  // price = 22250.5;
+  // creationDate = new Date();
+  // name = "Deena";
+  // reset(){
+  //   this.form.reset();
+  //   course : 1
+  // }
+  // submit(){
+  //   alert(`Welcome to the academy ,${this.form.value.name}!
+  //     We will contact you shortly about the ${this.courses.find(x => x.id == this.form.value.course)?.name} course`)
+  // }
+
+
+
 }
+
