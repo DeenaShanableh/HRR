@@ -1,24 +1,30 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet , RouterLink,RouterLinkActive} from '@angular/router';
 import { NgIf, NgFor ,NgClass,NgStyle, CommonModule} from '@angular/common';
 import { RandomColor } from './directives/random-color';
 import { FormsModule ,FormGroup,FormControl,ReactiveFormsModule, Validators } from '@angular/forms';
 import {ReversePipe}from './pipes/reverse-pipe'
 import { Employees } from './component/employees/employees';
+import { Departments } from './component/departments/departments';
+
 @Component({
   selector: 'app-root',
   imports: [
-    //RouterOutlet,
+    RouterOutlet,
     //  NgIf, 
     // NgFor, 
     // NgClass,
     //  NgStyle,
-     //RandomColor
-     FormsModule,
-     ReactiveFormsModule,
-     CommonModule,
-     //ReversePipe,
-     Employees],
+    //RandomColor
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    //ReversePipe,
+    Employees,
+    Departments,
+    RouterLink,
+    RouterLinkActive
+],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

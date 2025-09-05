@@ -1,4 +1,5 @@
 ﻿using HRR.DTOs.Employee;
+using HRR.DTOs.NewFolder;
 using HRR.Model;
 
 using HRR.NewFolder;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 namespace HRR.Controllers
 {
-    [Authorize] //Authentication / Authorization
+    // [Authorize] //Authentication / Authorization
     [Route("api/Employees")] //-- Data Anonotation
     [ApiController] //-- Data Anonotation
     public class EmployeesController : ControllerBase
@@ -17,14 +18,16 @@ namespace HRR.Controllers
     {
         private HrDbContext _dbContext;
 
+        public long Id { get; private set; }
+
         public EmployeesController(HrDbContext dbContext)//Constructer
         {
             _dbContext = dbContext;
-           
+
         }
-        [Authorize(Roles = "HR,Admin")]
+        //[Authorize(Roles = "HR,Admin")]
         [HttpGet("GetAll")] //--> Data Anonotation
-        public IActionResult GetAll([FromQuery]FilterEmployeeDto filterDto)//postion Is Optional //Query Parameter
+        public IActionResult GetAll([FromQuery] FilterEmployeeDto filterDto)//postion Is Optional //Query Parameter
         {
             try
             {
@@ -80,7 +83,7 @@ namespace HRR.Controllers
 
 
         [HttpGet("GetById")]
-        public IActionResult GetById([FromQuery]long Id) //1
+        public IActionResult GetById([FromQuery] long Id) //1
         {
             try
             {
@@ -118,43 +121,43 @@ namespace HRR.Controllers
         [HttpPost("Add")]
         public IActionResult Add([FromBody] SaveEmployeeDto employeeDto)
         {
-            try { 
-            var user = new User()
-            {
-                Id = 0,
-                UserName = $"{employeeDto.Name}_HR",//Ahmad -->Ahmad_HR
-                HashedPassword = BCrypt.Net.BCrypt.HashPassword($"{employeeDto.Name}@123"),//Ahmad -->Ahmad@123
-                IsAdmin = false
-            };
+            try {
+                var user = new User()
+                {
+                    Id = 0,
+                    UserName = $"{employeeDto.Name}_HR",//Ahmad -->Ahmad_HR
+                    HashedPassword = BCrypt.Net.BCrypt.HashPassword($"{employeeDto.Name}@123"),//Ahmad -->Ahmad@123
+                    IsAdmin = false
+                };
                 var _user = _dbContext.Users.FirstOrDefault(x => x.UserName.ToUpper() == user.UserName.ToUpper());
                 if (_user != null)
                 {
                     return BadRequest("cannot Add this Employee : The Username Already Exist . Please Select another name");
                 }
-            _dbContext.Users.Add(user);
+                _dbContext.Users.Add(user);
 
-            var employee = new Employee()
-            {
-                Id = 0,//Ignored
-                Name = employeeDto.Name,
-                BirthDate = employeeDto.BirthDate,
-                PostionId = employeeDto.PostionId,
-                IsActive = employeeDto.IsActive,
-                StartDate = employeeDto.StartDate,
-                EndDate = employeeDto.EndDate,
-                DepartmentId = employeeDto.DepartmentId,
-                ManagerId = employeeDto.ManagerId,
-                User = user
+                var employee = new Employee()
+                {
+                    Id = 0,//Ignored
+                    Name = employeeDto.Name,
+                    BirthDate = employeeDto.BirthDate,
+                    PostionId = employeeDto.PostionId,
+                    IsActive = employeeDto.IsActive,
+                    StartDate = employeeDto.StartDate,
+                    EndDate = employeeDto.EndDate,
+                    DepartmentId = employeeDto.DepartmentId,
+                    ManagerId = employeeDto.ManagerId,
+                    User = user
 
 
-            };
+                };
 
-            _dbContext.Employees.Add(employee);
+                _dbContext.Employees.Add(employee);
 
-            _dbContext.SaveChanges();
-            return Ok();
-        }
-             catch (Exception ex)
+                _dbContext.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -167,7 +170,7 @@ namespace HRR.Controllers
 
         //}
         [HttpPut("Update")]
-        public IActionResult Update([FromBody]SaveEmployeeDto employeeDto)
+        public IActionResult Update([FromBody] SaveEmployeeDto employeeDto)
         {
             try
             {
@@ -194,7 +197,7 @@ namespace HRR.Controllers
             }
         }
         [HttpDelete("Delete")]
-        public IActionResult Delete([FromQuery]long id) 
+        public IActionResult Delete([FromQuery] long id)
         {
             try
             {
@@ -212,8 +215,41 @@ namespace HRR.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("GetManagersList")]
+       public IActionResult GetManagersList([FromQuery] long employeeId )
+        {
+            var data = from emp in _dbContext.Employees
+                       from pos in _dbContext.Lookups.Where(x => x.Id == emp.PostionId)
+                       where emp.IsActive &&
+                       emp.Id != employeeId &&
+                             pos.MajorCode == (int)LookupMajorCodes.EmployeePositions &&
+                             pos.MajorCode == (int)PositionsMajorCodes.Manager
+                       select new  ShardeDto
+                       {
+                           Id = emp.Id,
+                           Name = emp.Name
+                       };
+            return Ok(data);
+        }
+
     }
 }
+public enum LookupMajorCodes
+{
+    EmployeePositions = 0,
+    DepartmentTypes = 1,
+    VacationTypes = 2
+
+}
+public enum PositionsMajorCodes
+{
+    HR = 1,
+    DepartmentTypes = 2,
+    VacationTypes = 3,
+    Manager = 4
+}
+
 
 
 //Simple Data Type : long, int, string.....|Quere Parameter

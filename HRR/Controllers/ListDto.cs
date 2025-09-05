@@ -1,0 +1,8 @@
+﻿namespace HRR.Controllers
+{
+    internal class ListDto
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+    }
+}
